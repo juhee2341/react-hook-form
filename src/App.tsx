@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Header from "./components/Header";
 
@@ -15,7 +15,6 @@ interface IFormInputs {
 function App() {
   const { register, handleSubmit, formState: { errors }, watch } = useForm<IFormInputs>();
   const [data, setData] = useState("");
-  const password = useRef({});
 
   return (
     <div className="App">
@@ -27,7 +26,7 @@ function App() {
           type="email"
           placeholder="ex) practice@gmail.com"
         />
-        {errors.Email && <p>{errors.Email.message}</p>}
+        <p>{errors.Email && errors.Email.message}</p>
         <label>Name</label>
         <input
           {...register("Name", { required: "Name is required.", maxLength: { value: 30, message: 'Up to 30 characters.' } })}
@@ -36,26 +35,26 @@ function App() {
         {errors.Name && <p>{errors.Name.message}</p>}
         <label>Password</label>
         <input
-          {...register("Password", { required: "Password is required.", minLength: { value: 6, message: 'Must be longer than 6 characters.' } })}
+          {...register("Password", { required: "Password is required.", minLength: { value: 7, message: 'Must be longer than 6 characters.' } })}
           type="password"
         />
         {errors.Password && <p>{errors.Password.message}</p>}
         <label>Password Confirm</label>
         <input
-          {...register("Password_Confirm", { required: "Check your password", validate: (value) => value === password.current })}
+          {...register("Password_Confirm", { required: "Check your password", validate: (value: string) => { if (watch('Password') !== value) { return "The passwords do not match." } } })}
           type="password"
         />
         {errors.Password_Confirm && <p>{errors.Password_Confirm.message}</p>}
-        {errors.Password_Confirm?.type === 'validate' && <p>The passwords do not match.</p>}
         <label>Residence</label>
         <select
-          {...register("Residence", { required: true })}
+          {...register("Residence", { required: 'Residence is required.' })}
         >
           <option value="">Please select !!!</option>
           <option value="Seoul">Seoul</option>
           <option value="Inchoen">Incheon</option>
           <option value="Others">Others</option>
         </select>
+        <p>{errors.Residence && errors.Residence.message}</p>
         <label>Welcome Message</label>
         <textarea
           {...register("Welcome_Message")}
