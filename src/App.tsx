@@ -13,7 +13,7 @@ interface IFormInputs {
 
 
 function App() {
-  const { register, handleSubmit, formState: { errors }, watch } = useForm<IFormInputs>();
+  const { register, handleSubmit, formState: { errors, isSubmitting }, watch } = useForm<IFormInputs>();
   const [data, setData] = useState("");
 
   return (
@@ -61,7 +61,7 @@ function App() {
           placeholder="Welcome Message"
         />
         <p>{data}</p>
-        <input type="submit" />
+        <input type="submit" disabled={isSubmitting} />
       </form>
     </div >
   );
